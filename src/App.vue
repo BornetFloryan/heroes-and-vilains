@@ -2,17 +2,22 @@
   <v-app>
     <v-main>
       <NavBar/>
-      <router-view/>
+      <ErrorDialog/>
+      <router-view />
     </v-main>
   </v-app>
 </template>
 
 <script>
-import NavBar from "@/views/NavBar.vue";
+import NavBar from "@/components/NavBar.vue";
+import ErrorDialog from "@/components/ErrorDialog.vue";
 
 export default {
   name: 'App',
-  components: {NavBar},
+  components: {
+    NavBar,
+    ErrorDialog,
+  },
 
   data: () => ({
   }),
