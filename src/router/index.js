@@ -6,7 +6,6 @@ import OrgDetail from '@/views/OrgDetail.vue';
 import TeamList from '@/views/TeamList.vue';
 import TeamDetail from '@/views/TeamDetail.vue';
 import HeroList from '@/views/HeroList.vue';
-import HeroDetail from "@/views/HeroDetail.vue";
 
 
 Vue.use(Router);
@@ -50,10 +49,5 @@ export default new Router({
       name: 'HeroesList',
       component: HeroList
     },
-    {
-      path: '/teams/:id',
-      name: 'HeroDetail',
-      component: HeroDetail,
-    }
   ]
 });

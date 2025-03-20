@@ -9,8 +9,8 @@
       </v-card-text>
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn color="blue darken-1" text @click="cancel">Annuler</v-btn>
-        <v-btn :disabled="confirmDisabled" color="blue darken-1" text @click="confirm">Valider</v-btn>
+        <v-btn v-if="showCancel" color="blue darken-1" text @click="cancel">{{ cancelText }}</v-btn>
+        <v-btn :disabled="confirmDisabled" color="blue darken-1" text @click="confirm">{{ confirmText }}</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -34,6 +34,18 @@ export default {
     confirmDisabled: {
       type: Boolean,
       default: false
+    },
+    showCancel: {
+      type: Boolean,
+      default: true
+    },
+    cancelText: {
+      type: String,
+      default: 'Annuler'
+    },
+    confirmText: {
+      type: String,
+      default: 'Valider'
     }
   },
   methods: {

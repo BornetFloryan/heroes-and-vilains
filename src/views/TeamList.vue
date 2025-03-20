@@ -1,22 +1,20 @@
 <template>
   <v-container>
+    <v-toolbar flat>
+      <v-toolbar-title>Équipes</v-toolbar-title>
+      <v-spacer></v-spacer>
+      <v-btn @click="openDialog">Créer une équipe</v-btn>
+    </v-toolbar>
     <v-data-table
         :headers="headers"
         :items="teamList"
         item-key="_id"
     >
-      <template v-slot:top>
-        <v-toolbar flat>
-          <v-toolbar-title>Teams</v-toolbar-title>
-          <v-spacer></v-spacer>
-          <v-btn @click="openDialog">Create Team</v-btn>
-        </v-toolbar>
-      </template>
     </v-data-table>
 
     <custom-dialog
         :visible="dialog"
-        title="Create Team"
+        title="Créer une équipe"
         :confirmDisabled="!isFormValid"
         @cancel="closeDialog"
         @confirm="submit"
@@ -24,7 +22,7 @@
       <v-form v-model="valid">
         <v-text-field
             v-model="teamName"
-            label="Team Name"
+            label="Nom de l'équipe"
             required
         ></v-text-field>
       </v-form>
@@ -46,7 +44,7 @@ export default {
       valid: false,
       teamName: '',
       headers: [
-        { text: 'Name', value: 'name' },
+        { text: 'Nom', value: 'name' },
         { text: 'Actions', value: 'actions', sortable: false }
       ]
     };
@@ -68,6 +66,11 @@ export default {
     },
     async submit() {
       if (this.valid) {
+        const teamExists = this.teamList.some(team => team.name === this.teamName);
+        if (teamExists) {
+          alert('Une équipe avec ce nom existe déjà.');
+          return;
+        }
         await this.createTeam(this.teamName);
         this.closeDialog();
         this.fetchTeamList();

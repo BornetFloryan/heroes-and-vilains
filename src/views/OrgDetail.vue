@@ -19,8 +19,9 @@
     <custom-dialog
         :visible="showNoOrgDialog"
         title="Aucune organisation à afficher"
-        @cancel="showNoOrgDialog = false"
         @confirm="goBackToOrgList"
+        :showCancel="false"
+        confirmText="OK"
     >
       <p>Il n'y a aucune organisation à afficher. Veuillez vérifier votre code secret ou réessayer plus tard.</p>
     </custom-dialog>
@@ -82,6 +83,7 @@ export default {
     ...mapActions('orgs', ['fetchOrgById', 'addTeamToOrg', 'removeTeamFromOrg']),
     ...mapActions('teams', ['fetchTeamList']),
     ...mapMutations('teams', ['setCurrentTeam']),
+    ...mapMutations('orgs', ['setCurrentOrg']),
     async loadOrganization() {
       try {
         await this.fetchOrgById({ id: this.$route.params.id, secret: this.secret });
@@ -137,8 +139,14 @@ export default {
     },
   },
   async mounted() {
-    await this.loadOrganization();
-    await this.fetchTeamList();
+    if(!this.secret){
+      this.$router.push('/organizations');
+      this.setCurrentTeam(null);
+      this.setCurrentOrg(null);
+    } else {
+      await this.loadOrganization();
+      await this.fetchTeamList();
+    }
   },
 };
 </script>

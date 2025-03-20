@@ -1,5 +1,10 @@
 <template>
   <v-container>
+    <v-toolbar flat>
+      <v-toolbar-title>Organisations</v-toolbar-title>
+      <v-spacer></v-spacer>
+      <v-btn @click="dialog = true">Créer une organisation</v-btn>
+    </v-toolbar>
     <v-data-table
         v-if="orgList.length"
         :headers="headers"
@@ -7,13 +12,6 @@
         item-key="_id"
         @click:row="goToOrgDetail"
     >
-      <template v-slot:top>
-        <v-toolbar flat>
-          <v-toolbar-title>Organizations</v-toolbar-title>
-          <v-spacer></v-spacer>
-          <v-btn @click="dialog = true">Create Organization</v-btn>
-        </v-toolbar>
-      </template>
     </v-data-table>
 
     <v-alert v-else type="info">Aucune organisation trouvée.</v-alert>
@@ -21,26 +19,26 @@
     <v-dialog v-model="dialog" persistent max-width="600px">
       <v-card>
         <v-card-title>
-          <span class="headline">Create Organization</span>
+          <span class="headline">Créer une organisation</span>
         </v-card-title>
         <v-card-text>
           <v-form v-model="valid">
             <v-text-field
                 v-model="name"
-                label="Organization Name"
+                label="Nom de l'organisation"
                 required
             ></v-text-field>
             <v-text-field
-                v-model="secret"
-                label="Secret Phrase"
+                v-model="passSecret"
+                label="Phrase secrète"
                 required
             ></v-text-field>
           </v-form>
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="blue darken-1" text @click="closeDialog">Cancel</v-btn>
-          <v-btn color="blue darken-1" text @click="submit">Create</v-btn>
+          <v-btn color="blue darken-1" text @click="closeDialog">Annuler</v-btn>
+          <v-btn color="blue darken-1" text @click="submit">Créer</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -56,6 +54,7 @@ export default {
       dialog: false,
       valid: false,
       name: '',
+      passSecret: '',
       targetOrgId: null,
       headers: [
         { text: 'Name', value: 'name' },
@@ -82,7 +81,7 @@ export default {
         alert("Accès refusé : clé manquante.");
         this.$router.push('/auth');
       } else {
-        this.$router.push({ name: 'OrgDetail', params: { id: item._id } });
+        this.$router.push({name: 'OrgDetail', params: {id: item._id}});
       }
     },
     closeDialog() {
@@ -91,7 +90,12 @@ export default {
     },
     async submit() {
       if (this.valid) {
-        await this.createOrg({ name: this.name, secret: this.secret });
+        const orgExists = this.orgList.some(org => org.name === this.name);
+        if (orgExists) {
+          alert('Une organisation avec ce nom existe déjà.');
+          return;
+        }
+        await this.createOrg({name: this.name, secret: this.passSecret});
         this.closeDialog();
         this.fetchOrganizations();
       }
@@ -100,7 +104,7 @@ export default {
   watch: {
     secret(newSecret) {
       if (newSecret && this.targetOrgId) {
-        this.$router.push({ name: 'OrgDetail', params: { id: this.targetOrgId } });
+        this.$router.push({name: 'OrgDetail', params: {id: this.targetOrgId}});
         this.targetOrgId = null;
       }
     }

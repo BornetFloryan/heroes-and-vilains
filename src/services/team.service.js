@@ -11,7 +11,6 @@ export async function createTeamFromAPI(name) {
 
 export async function addHeroesToTeamFromAPI(idTeam, idHeroes) {
     let data = { idHeroes: [idHeroes], idTeam: idTeam };
-    console.log(data)
     return patchRequest('/teams/addheroes', data, 'ADDHEROESTOTEAM');
 }
 

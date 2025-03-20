@@ -1,25 +1,23 @@
 <template>
   <v-container>
+    <v-toolbar flat>
+      <v-toolbar-title>Héros</v-toolbar-title>
+      <v-spacer></v-spacer>
+      <v-btn @click="dialog = true">Créer un héros</v-btn>
+    </v-toolbar>
     <v-data-table
         v-if="heroList.length"
         :headers="headers"
         :items="heroList"
         item-key="_id"
     >
-      <template v-slot:top>
-        <v-toolbar flat>
-          <v-toolbar-title>Heroes</v-toolbar-title>
-          <v-spacer></v-spacer>
-          <v-btn @click="dialog = true">Create Hero</v-btn>
-        </v-toolbar>
-      </template>
     </v-data-table>
 
     <v-alert v-else type="info">Aucun héros trouvé.</v-alert>
 
     <custom-dialog
         :visible="dialog"
-        title="Create Hero"
+        title="Créer un héros"
         :confirmDisabled="!isFormValid"
         @cancel="closeDialog"
         @confirm="submit"
@@ -27,40 +25,38 @@
       <v-form v-model="valid">
         <v-text-field
             v-model="publicName"
-            label="Hero Public Name"
+            label="Nom public"
             required
         ></v-text-field>
         <v-text-field
             v-model="realName"
-            label="Hero Real Name"
+            label="Vrai nom"
             required
         ></v-text-field>
         <v-divider></v-divider>
-        <v-btn @click="addPower">Add Power</v-btn>
+        <v-btn @click="addPower">Ajouter un pouvoir</v-btn>
         <v-list>
           <v-list-item v-for="(power, index) in powers" :key="index">
             <v-text-field
                 v-model="power.name"
-                label="Power Name"
+                label="Nom du pouvoir"
                 required
             ></v-text-field>
             <v-text-field
                 v-model="power.type"
-                label="Power Type"
+                label="Type de pouvoir"
                 type="number"
-                min="1"
-                max="7"
+                :rules="[v => (v >= 1 && v <= 7) || 'Type de pouvoir doit être entre 1 et 7']"
                 required
             ></v-text-field>
             <v-text-field
                 v-model="power.level"
-                label="Power Level"
+                label="Niveau de pouvoir"
                 type="number"
-                min="0"
-                max="100"
+                :rules="[v => (v >= 0 && v <= 100) || 'Niveau de pouvoir doit être entre 0 et 100']"
                 required
             ></v-text-field>
-            <v-btn @click="removePower(index)">Remove</v-btn>
+            <v-btn @click="removePower(index)">Supprimer</v-btn>
           </v-list-item>
         </v-list>
       </v-form>
@@ -85,13 +81,13 @@ export default {
       powers: [],
       targetHeroId: null,
       headers: [
-        { text: 'Public Name', value: 'publicName' },
-        { text: 'Real Name', value: 'realName' },
+        { text: 'Nom public', value: 'publicName' },
+        { text: 'Vrai nom', value: 'realName' },
       ],
     };
   },
   computed: {
-    ...mapState('heroes', ['heroList', 'currentHero']),
+    ...mapState('heroes', ['heroList']),
     ...mapState(['secret']),
     isFormValid() {
       return this.publicName && this.realName;
@@ -99,7 +95,6 @@ export default {
   },
   methods: {
     ...mapActions('heroes', ['fetchHeroList', 'createHero']),
-    ...mapMutations('heroes', ['setCurrentHero']),
     closeDialog() {
       this.dialog = false;
       this.publicName = '';
@@ -127,7 +122,6 @@ export default {
   },
   async created() {
     await this.fetchHeroList();
-    this.setCurrentHero(null);
   }
 };
 </script>

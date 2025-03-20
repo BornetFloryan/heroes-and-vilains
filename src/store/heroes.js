@@ -41,8 +41,11 @@ const actions = {
     },
     async createHero({ dispatch }, heroData) {
         try {
-            await heroService.createHeroService(heroData.publicName, heroData.realName, heroData.powers);
-            await dispatch("fetchHeroList");
+            let response = await heroService.createHeroService(heroData.publicName, heroData.realName, heroData.powers);
+            if(response.error === 0){
+                await dispatch("fetchHeroList");
+            }
+
         } catch (error) {
             console.error('Erreur lors de la création du héros', error);
             return { error: 1, data: 'Erreur lors de la création du héros' };
