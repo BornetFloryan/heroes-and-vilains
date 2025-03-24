@@ -17,7 +17,7 @@ export default {
     };
   },
   methods: {
-    ...mapActions(['setSecret']),
+    ...mapActions('secret', ['setSecret']),
     authenticate() {
       this.setSecret(this.secret);
       this.$router.push('/organizations');

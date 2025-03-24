@@ -14,13 +14,13 @@ import { mapState, mapActions } from 'vuex';
 
 export default {
   computed: {
-    ...mapState(['secret']),
+    ...mapState('secret', ['secret']),
     authButtonText() {
       return this.secret ? 'Logout' : 'Login';
     }
   },
   methods: {
-    ...mapActions(['setSecret']),
+    ...mapActions('secret', ['setSecret']),
     handleAuth() {
       if (this.secret) {
         this.setSecret('');

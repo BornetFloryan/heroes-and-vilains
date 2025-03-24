@@ -39,9 +39,9 @@ const actions = {
             return { error: 1, data: 'Erreur lors de la création de l\'organisation' };
         }
     },
-    async addTeamToOrg({ dispatch }, { idTeam, secret }) {
+    async addTeamToOrg({ dispatch }, { idTeam }) {
         try {
-            let response = await orgService.addTeamToOrgService(idTeam, secret);
+            let response = await orgService.addTeamToOrgService(idTeam);
             if (response.error === 0) {
                 await dispatch("fetchOrgList");
             }
@@ -51,9 +51,9 @@ const actions = {
             return { error: 1, data: 'Erreur lors de l\'ajout de l\'équipe à l\'organisation' };
         }
     },
-    async removeTeamFromOrg({ dispatch }, { idTeam, secret }) {
+    async removeTeamFromOrg({ dispatch }, { idTeam }) {
         try {
-            let response = await orgService.removeTeamFromOrgService(idTeam, secret);
+            let response = await orgService.removeTeamFromOrgService(idTeam);
             if(response.error === 0) {
                 await dispatch("fetchOrgList");
             }
@@ -63,9 +63,9 @@ const actions = {
             return { error: 1, data: 'Erreur lors du retrait de l\'équipe de l\'organisation' };
         }
     },
-    async fetchOrgById({ commit }, { id, secret }) {
+    async fetchOrgById({ commit }, { id }) {
         try {
-            let response = await orgService.getOrgByIdService(id, secret);
+            let response = await orgService.getOrgByIdService(id);
             if (response.error === 0) {
                 commit("setCurrentOrg", response.data[0]);
             }

@@ -27,9 +27,9 @@ const actions = {
             return { error: 1, data: 'Erreur lors de la récupération des héros' };
         }
     },
-    async fetchHeroById({ commit }, { id, secret }) {
+    async fetchHeroById({ commit }, { id }) {
         try {
-            let response = await heroService.getHeroByIdService(id, secret);
+            let response = await heroService.getHeroByIdService(id);
             if(response.error === 0){
                 commit("setCurrentHero", response.data);
             }
@@ -51,9 +51,9 @@ const actions = {
             return { error: 1, data: 'Erreur lors de la création du héros' };
         }
     },
-    async updateHero({ dispatch }, { _id, publicName, realName, powers, secret }) {
+    async updateHero({ dispatch }, { _id, publicName, realName, powers }) {
         try {
-            let response = await heroService.updateHeroService(_id, publicName, realName, powers, secret);
+            let response = await heroService.updateHeroService(_id, publicName, realName, powers);
             if(response.error === 0){
                 await dispatch("fetchHeroList");
             }

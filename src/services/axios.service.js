@@ -1,4 +1,5 @@
 import axios from 'axios'
+import store from "@/store";
 
 /* Explications :
 
@@ -26,6 +27,27 @@ Ces trois cas sont traités par une unique fonction handleError().
 const axiosAgent = axios.create({
     baseURL: 'https://apidemo.iut-bm.univ-fcomte.fr/herocorp'
 })
+
+axiosAgent.interceptors.request.use(
+    config => {
+        const secret = store.state.secret.secret;
+        if (secret) {
+            config.headers['org-secret'] = secret;
+        }
+        return config;
+    },
+    error => {
+        return Promise.reject(error);
+    }
+);
+
+axiosAgent.interceptors.response.use(
+    response => response,
+    error => {
+        store.dispatch('errors/pushError', error.message);
+        return Promise.reject(error);
+    }
+);
 
 /* Pour la démonstration, décommenter l'instruction suivnante.
   Cela permet d'ajouter à toutes les requêtes une entête api-key.

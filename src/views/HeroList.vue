@@ -114,9 +114,17 @@ export default {
           realName: this.realName,
           powers: this.powers.filter(power => power.name && power.type && power.level)
         };
-        await this.createHero({ ...heroData, secret: this.secret });
-        this.closeDialog();
-        await this.fetchHeroList()
+        try{
+          let response = await this.createHero({ ...heroData });
+          if(response.error === 0){
+            this.closeDialog();
+            await this.fetchHeroList();
+          } else {
+            this.$store.dispatch('errors/pushError', response.data.data);
+          }
+        } catch (err) {
+          this.$store.dispatch('errors/pushError', err);
+        }
       }
     }
   },

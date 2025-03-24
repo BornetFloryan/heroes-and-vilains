@@ -1,7 +1,7 @@
 <template>
   <v-container>
-    <v-btn @click="goBack">Retour</v-btn>
     <v-card v-if="currentOrg">
+      <v-btn @click="goBack">Retour</v-btn>
       <v-card-title>{{ currentOrg.name }}</v-card-title>
       <v-card-text>
         <v-btn @click="openAddTeamDialog">Ajouter une équipe</v-btn>
@@ -87,7 +87,7 @@ export default {
     ...mapMutations('orgs', ['setCurrentOrg']),
     async loadOrganization() {
       try {
-        await this.fetchOrgById({ id: this.$route.params.id, secret: this.secret });
+        await this.fetchOrgById({ id: this.$route.params.id });
         if (!this.currentOrg) {
           this.showNoOrgDialog = true;
         }
@@ -110,11 +110,16 @@ export default {
     async confirmAddTeam() {
       if (this.selectedTeam) {
         try {
-          await this.addTeamToOrg({ idTeam: this.selectedTeam, secret: this.secret });
-          await this.loadOrganization();
-          this.closeAddTeamDialog();
+          let response = await this.addTeamToOrg({ idTeam: this.selectedTeam });
+          console.log(response);
+          if(response.error === 0){
+            await this.loadOrganization();
+            this.closeAddTeamDialog();
+          } else {
+            this.$store.dispatch('errors/pushError', response.data);
+          }
         } catch (err) {
-          alert("Erreur lors de l'ajout de l'équipe : " + err);
+          this.$store.dispatch('errors/pushError',err);
         }
       }
     },
@@ -128,11 +133,15 @@ export default {
     },
     async confirmRemoveTeam() {
       try {
-        await this.removeTeamFromOrg({ idTeam: this.teamToRemove, secret: this.secret });
-        await this.loadOrganization();
-        this.closeRemoveTeamDialog();
+        let response = await this.removeTeamFromOrg({ idTeam: this.teamToRemove });
+        if (response.error === 0) {
+          await this.loadOrganization();
+          this.closeRemoveTeamDialog();
+        } else {
+          this.$store.dispatch('errors/pushError', response.data);
+        }
       } catch (err) {
-        alert("Erreur lors du retrait de l'équipe : " + err);
+        this.$store.dispatch('errors/pushError', err);
       }
     },
     goBackToOrgList() {

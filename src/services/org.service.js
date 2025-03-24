@@ -9,33 +9,18 @@ export async function createOrgFromAPI(name, secret) {
     return postRequest('/orgs/create', data, 'CREATEORG');
 }
 
-export async function addTeamToOrgFromAPI(idTeam, orgSecret) {
+export async function addTeamToOrgFromAPI(idTeam) {
     let data = { idTeam: idTeam };
-    const config = {
-        headers: {
-            'org-secret': orgSecret
-        }
-    };
-    return patchRequest('/orgs/addteam', data, 'ADDTEAMTOORG', config);
+    return patchRequest('/orgs/addteam', data, 'ADDTEAMTOORG');
 }
 
-export async function removeTeamFromOrgFromAPI(idTeam, orgSecret) {
+export async function removeTeamFromOrgFromAPI(idTeam) {
     let data = { idTeam: idTeam };
-    const config = {
-        headers: {
-            'org-secret': orgSecret
-        }
-    };
-    return patchRequest('/orgs/removeteam', data, 'REMOVETEAMFROMORG', config);
+    return patchRequest('/orgs/removeteam', data, 'REMOVETEAMFROMORG');
 }
 
-export async function getOrgByIdFromAPI(id, orgSecret) {
-    const config = {
-        headers: {
-            'org-secret': orgSecret
-        }
-    };
-    return getRequest(`/orgs/getbyid/${id}`, 'GETORG', config);
+export async function getOrgByIdFromAPI(id,) {
+    return getRequest(`/orgs/getbyid/${id}`, 'GETORG');
 }
 
 
@@ -60,30 +45,30 @@ export async function createOrgService(name, secret) {
     return response;
 }
 
-export async function addTeamToOrgService(idTeam, orgSecret) {
+export async function addTeamToOrgService(idTeam) {
     let response;
     try {
-        response = await addTeamToOrgFromAPI(idTeam, orgSecret);
+        response = await addTeamToOrgFromAPI(idTeam);
     } catch (error) {
         response = { error: 1, status: 404, data: 'erreur réseau, impossible d\'ajouter une équipe à l\'organisation' };
     }
     return response;
 }
 
-export async function removeTeamFromOrgService(idTeam, orgSecret) {
+export async function removeTeamFromOrgService(idTeam) {
     let response;
     try {
-        response = await removeTeamFromOrgFromAPI(idTeam, orgSecret);
+        response = await removeTeamFromOrgFromAPI(idTeam);
     } catch (error) {
         response = { error: 1, status: 404, data: 'erreur réseau, impossible de retirer une équipe de l\'organisation' };
     }
     return response;
 }
 
-export async function getOrgByIdService(id, orgSecret) {
+export async function getOrgByIdService(id) {
     let response;
     try {
-        response = await getOrgByIdFromAPI(id, orgSecret);
+        response = await getOrgByIdFromAPI(id);
     } catch (error) {
         response = { error: 1, status: 404, data: 'erreur réseau, impossible de récupérer l\'organisation' };
     }

@@ -86,9 +86,17 @@ export default {
           alert('Une organisation avec ce nom existe déjà.');
           return;
         }
-        await this.createOrg({name: this.name, secret: this.passSecret});
-        this.closeDialog();
-        await this.fetchOrgList();
+        try {
+          let response = await this.createOrg({ name: this.name, secret: this.passSecret });
+          if(response.error === 0) {
+            this.closeDialog();
+            await this.fetchOrgList();
+          } else {
+            this.$store.dispatch('errors/pushError', response.data);
+          }
+        } catch (err) {
+          this.$store.dispatch('errors/pushError', err);
+        }
       }
     }
   },

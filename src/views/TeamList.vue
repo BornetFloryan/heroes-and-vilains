@@ -71,9 +71,17 @@ export default {
           alert('Une équipe avec ce nom existe déjà.');
           return;
         }
-        await this.createTeam(this.teamName);
-        this.closeDialog();
-        this.fetchTeamList();
+        try{
+          let response = await this.createTeam(this.teamName);
+          if(response.error === 0){
+            this.closeDialog();
+            this.fetchTeamList();
+          } else {
+            this.$store.dispatch('errors/pushError', response.data);
+          }
+        } catch (err) {
+          this.$store.dispatch('errors/pushError', err);
+        }
       }
     },
   },

@@ -1,7 +1,7 @@
 <template>
   <v-container>
-    <v-btn @click="goBack">Retour</v-btn>
     <v-card v-if="currentTeam">
+      <v-btn @click="goBack">Retour</v-btn>
       <v-card-title>{{ currentTeam.name }}</v-card-title>
       <v-card-text>
         <v-btn @click="openAddMemberDialog">Ajouter un membre</v-btn>
@@ -227,9 +227,11 @@ export default {
             let response = await heroService.getHeroByIdService(member_id, this.secret);
             if (response.error === 0) {
               teamMembers.push(response.data[0]);
+            } else {
+              this.$store.dispatch('errors/pushError', response.data);
             }
-          } catch (error) {
-            alert('fetchTeamMembers ', error);
+          } catch (err) {
+            this.$store.dispatch('errors/pushError', err);
           }
         }
         this.teamMembers = teamMembers;
@@ -251,9 +253,11 @@ export default {
             this.closeAddMemberDialog();
             await this.fetchTeamMembers();
             await this.fetchTeamList();
+          } else {
+            this.$store.dispatch('errors/pushError', response.data);
           }
-        }catch(error) {
-          alert('confirmAddMember : ' + error);
+        }catch(err) {
+          this.$store.dispatch('errors/pushError', err);
         }
       }
     },
@@ -283,21 +287,25 @@ export default {
                 this.closeAddMemberDialog()
                 await this.fetchTeamList();
                 await this.fetchTeamMembers();
+              } else {
+                this.$store.dispatch('errors/pushError', response.data);
               }
-            } catch (error) {
-              alert('confirmCreateHero : ' + error);
+            } catch (err) {
+              this.$store.dispatch('errors/pushError', err);
             }
           }
-        } catch (error) {
-          alert('confirmCreateHero : ' + error);
+        } catch (err) {
+          alert('confirmCreateHero : ' + err);
         }
       }
     },
     async openEditMemberDialog(heroId) {
-      const response = await this.fetchHeroById({id: heroId, secret: this.secret});
+      const response = await this.fetchHeroById({id: heroId});
       if (response.error === 0) {
         this.editMember = response.data[0];
         this.showEditMemberDialog = true;
+      } else {
+        this.$store.dispatch('errors/pushError', response.data);
       }
     },
     closeEditMemberDialog() {
@@ -315,7 +323,7 @@ export default {
         if (this.heroList.some(hero => hero.publicName === this.editMember.publicName && hero._id !== this.editMember._id) ||
             this.heroList.some(hero => hero.realName === this.editMember.realName && hero._id !== this.editMember._id)) {
           this.closeConfirmEditDialog();
-          alert('Le(s) nom(s) est déjà utilisé !');
+          this.$store.dispatch('errors/pushError', 'Le(s) nom(s) est déjà utilisé !');
           return;
         }
         await this.updateHero({
@@ -323,7 +331,6 @@ export default {
           publicName: this.editMember.publicName,
           realName: this.editMember.realName,
           powers: this.editMember.powers,
-          secret: this.secret
         });
         this.closeConfirmEditDialog();
         this.closeEditMemberDialog();
@@ -347,9 +354,11 @@ export default {
           this.closeRemoveMemberDialog();
           await this.fetchTeamList();
           await this.fetchTeamMembers();
+        } else {
+          this.$store.dispatch('errors/pushError', response.data);
         }
-      } catch (error) {
-        alert('confirmRemoveMember ', error);
+      } catch (err) {
+        this.$store.dispatch('errors/pushError', err);
       }
     },
     addPower() {

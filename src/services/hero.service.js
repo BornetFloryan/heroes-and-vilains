@@ -8,12 +8,12 @@ export async function createHeroFromAPI(data) {
     return postRequest('/heroes/create', data, 'CREATEHERO');
 }
 
-export async function updateHeroFromAPI(data, config) {
-    return putRequest('/heroes/update', data, 'UPDATEHERO', config);
+export async function updateHeroFromAPI(data) {
+    return putRequest('/heroes/update', data, 'UPDATEHERO');
 }
 
-export async function getHeroByIdFromAPI(id, config) {
-    return getRequest(`/heroes/getbyid/${id}`, 'GETHERO', config);
+export async function getHeroByIdFromAPI(id) {
+    return getRequest(`/heroes/getbyid/${id}`, 'GETHERO');
 }
 
 // Service functions
@@ -57,7 +57,7 @@ export async function createHeroService(publicName, realName, powers) {
     return response;
 }
 
-export async function updateHeroService(id, publicName, realName, powers, orgSecret) {
+export async function updateHeroService(id, publicName, realName, powers) {
     let response;
     try {
         let data = {
@@ -67,25 +67,18 @@ export async function updateHeroService(id, publicName, realName, powers, orgSec
             powers
         };
 
-        const config = {
-            headers: { 'org-secret': orgSecret }
-        };
-
-        response = await updateHeroFromAPI(data, config);
+        response = await updateHeroFromAPI(data);
     } catch (error) {
         response = { error: 1, status: 404, data: 'erreur réseau, impossible de mettre à jour le héros' };
     }
     return response;
 }
 
-export async function getHeroByIdService(id, orgSecret) {
+export async function getHeroByIdService(id) {
     let response;
     try {
-        const config = {
-            headers: { 'org-secret': orgSecret }
-        };
 
-        response = await getHeroByIdFromAPI(id, config);
+        response = await getHeroByIdFromAPI(id);
     } catch (error) {
         response = { error: 1, status: 404, data: 'erreur réseau, impossible de récupérer le héros' };
     }
