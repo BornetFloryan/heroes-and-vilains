@@ -205,7 +205,7 @@ export default {
   computed: {
     ...mapState('teams', ['currentTeam']),
     ...mapState('heroes', ['heroList']),
-    ...mapState(['secret']),
+    ...mapState('secret', ['secret']),
     availableHeroes() {
       if (!this.heroList) return [];
       return this.heroList.filter(hero => !this.heroList.includes(hero._id));

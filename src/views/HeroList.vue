@@ -88,7 +88,7 @@ export default {
   },
   computed: {
     ...mapState('heroes', ['heroList']),
-    ...mapState(['secret']),
+    ...mapState('secret', ['secret']),
     isFormValid() {
       return this.publicName && this.realName;
     }

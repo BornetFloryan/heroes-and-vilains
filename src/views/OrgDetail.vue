@@ -74,7 +74,7 @@ export default {
   computed: {
     ...mapState('orgs', ['currentOrg']),
     ...mapState('teams', ['teamList']),
-    ...mapState(['secret']),
+    ...mapState('secret', ['secret']),
     recruitableTeams() {
       if (!this.currentOrg) return [];
       return this.teamList.filter(team => !this.currentOrg.teams.some(orgTeam => orgTeam._id === team._id));
@@ -111,7 +111,6 @@ export default {
       if (this.selectedTeam) {
         try {
           let response = await this.addTeamToOrg({ idTeam: this.selectedTeam });
-          console.log(response);
           if(response.error === 0){
             await this.loadOrganization();
             this.closeAddTeamDialog();
@@ -153,7 +152,9 @@ export default {
   },
   async mounted() {
     if(!this.secret){
-      this.$router.push('/organizations');
+      if (this.$router.currentRoute.path !== '/organizations') {
+        this.$router.push('/organizations');
+      }
       this.setCurrentTeam(null);
       this.setCurrentOrg(null);
     } else {

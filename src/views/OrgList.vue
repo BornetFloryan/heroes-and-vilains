@@ -63,7 +63,7 @@ export default {
   },
   computed: {
     ...mapState('orgs', ['orgList', 'currentOrg']),
-    ...mapState(['secret']),
+    ...mapState('secret', ['secret']),
   },
   methods: {
     ...mapActions('orgs', ['fetchOrgList', 'createOrg']),
