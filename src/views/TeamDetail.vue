@@ -1,5 +1,6 @@
 <template>
   <v-container>
+    <v-btn @click="goBack">Retour</v-btn>
     <v-card v-if="currentTeam">
       <v-card-title>{{ currentTeam.name }}</v-card-title>
       <v-card-text>
@@ -248,11 +249,11 @@ export default {
           if (response.error === 0) {
             this.setCurrentTeam(response.data);
             this.closeAddMemberDialog();
-            await this.fetchTeamList();
             await this.fetchTeamMembers();
+            await this.fetchTeamList();
           }
         }catch(error) {
-          alert('confirmAddMember ', error);
+          alert('confirmAddMember : ' + error);
         }
       }
     },
@@ -284,11 +285,11 @@ export default {
                 await this.fetchTeamMembers();
               }
             } catch (error) {
-              alert('confirmCreateHero ', error);
+              alert('confirmCreateHero : ' + error);
             }
           }
         } catch (error) {
-          alert('confirmCreateHero ', error);
+          alert('confirmCreateHero : ' + error);
         }
       }
     },
@@ -364,7 +365,10 @@ export default {
       } else {
         this.newMember.powers.splice(index, 1);
       }
-    }
+    },
+    goBack() {
+        this.$router.go(-1);
+    },
   },
   async created() {
     if (!this.secret) {

@@ -1,5 +1,6 @@
 <template>
   <v-container>
+    <v-btn @click="goBack">Retour</v-btn>
     <v-card v-if="currentOrg">
       <v-card-title>{{ currentOrg.name }}</v-card-title>
       <v-card-text>
@@ -91,7 +92,7 @@ export default {
           this.showNoOrgDialog = true;
         }
       } catch (err) {
-        alert("Accès refusé : clé incorrecte ou expirée.");
+        alert(err);
         this.showNoOrgDialog = true;
       }
     },
@@ -113,7 +114,7 @@ export default {
           await this.loadOrganization();
           this.closeAddTeamDialog();
         } catch (err) {
-          alert("Erreur lors de l'ajout de l'équipe.");
+          alert("Erreur lors de l'ajout de l'équipe : " + err);
         }
       }
     },
@@ -131,11 +132,14 @@ export default {
         await this.loadOrganization();
         this.closeRemoveTeamDialog();
       } catch (err) {
-        alert("Erreur lors du retrait de l'équipe.");
+        alert("Erreur lors du retrait de l'équipe : " + err);
       }
     },
     goBackToOrgList() {
       this.$router.push('/organizations');
+    },
+    goBack() {
+      this.$router.go(-1);
     },
   },
   async mounted() {

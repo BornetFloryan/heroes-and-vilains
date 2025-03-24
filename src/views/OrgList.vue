@@ -68,20 +68,11 @@ export default {
   methods: {
     ...mapActions('orgs', ['fetchOrgList', 'createOrg']),
     ...mapMutations('orgs', ['setCurrentOrg']),
-    async fetchOrganizations() {
-      try {
-        await this.fetchOrgList();
-      } catch {
-        alert("Accès refusé : clé incorrecte ou expirée.");
-      }
-    },
     goToOrgDetail(item) {
-      if (!this.secret) {
-        this.targetOrgId = item._id;
-        alert("Accès refusé : clé manquante.");
-        this.$router.push('/auth');
+      if (this.secret) {
+        this.$router.push({ name: 'OrgDetail', params: { id: item._id } });
       } else {
-        this.$router.push({name: 'OrgDetail', params: {id: item._id}});
+        alert('Veuillez renseigner votre clé secrète.');
       }
     },
     closeDialog() {
@@ -97,7 +88,7 @@ export default {
         }
         await this.createOrg({name: this.name, secret: this.passSecret});
         this.closeDialog();
-        this.fetchOrganizations();
+        await this.fetchOrgList();
       }
     }
   },
@@ -111,7 +102,7 @@ export default {
   },
   created() {
     this.setCurrentOrg(null);
-    this.fetchOrganizations();
+    this.fetchOrgList()
   }
 };
 </script>

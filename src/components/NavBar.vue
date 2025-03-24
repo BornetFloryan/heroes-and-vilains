@@ -24,9 +24,13 @@ export default {
     handleAuth() {
       if (this.secret) {
         this.setSecret('');
-      }
-      if (this.$route.path !== '/auth') {
-        this.$router.push('/auth');
+        if (this.$route.path !== '/organizations') {
+          this.$router.push('/organizations');
+        }
+      } else {
+        if (this.$route.path !== '/auth') {
+          this.$router.push('/auth');
+        }
       }
     },
     navigateTo(route) {

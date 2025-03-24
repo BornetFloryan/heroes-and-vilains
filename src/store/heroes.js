@@ -45,7 +45,7 @@ const actions = {
             if(response.error === 0){
                 await dispatch("fetchHeroList");
             }
-
+            return response;
         } catch (error) {
             console.error('Erreur lors de la création du héros', error);
             return { error: 1, data: 'Erreur lors de la création du héros' };
