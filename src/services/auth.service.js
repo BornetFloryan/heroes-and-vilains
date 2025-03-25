@@ -9,8 +9,8 @@ export async function getUserFromAPI(login) {
     return getRequest(`authapi/user/getuser/${login}`, 'GETUSER');
 }
 
-export async function updateHeroFromAPI(heroData) {
-    return postRequest('herocorp/heroes/authupdate', heroData, 'UPDATEHERO');
+export async function updateHeroFromAPI(data) {
+    return postRequest('herocorp/heroes/authupdate', data, 'UPDATEHERO');
 }
 
 export async function registerFromAPI(data) {
@@ -37,10 +37,16 @@ export async function getUserService(login) {
     return response;
 }
 
-export async function updateHeroService(heroData) {
+export async function updateHeroService({ _id, publicName, realName, powers }) {
     let response;
     try {
-        response = await updateHeroFromAPI(heroData);
+        let data = {
+            _id: id,
+            publicName,
+            realName,
+            powers
+        };
+        response = await updateHeroFromAPI(data);
     } catch (error) {
         response = { error: 1, status: 404, data: 'Erreur réseau, impossible de mettre à jour le héros' };
     }

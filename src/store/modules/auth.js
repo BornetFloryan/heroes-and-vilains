@@ -48,9 +48,9 @@ const actions = {
         }
     },
 
-    async updateHero(_, heroData) {
+    async updateHero(_, { _id, publicName, realName, powers }) {
         try {
-            let response = await authService.updateHeroService(heroData);
+            let response = await authService.updateHeroService({ _id, publicName, realName, powers });
             return response;
         } catch (error) {
             console.error("Erreur de mise à jour du héros", error);

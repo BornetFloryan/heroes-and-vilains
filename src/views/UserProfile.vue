@@ -115,9 +115,23 @@ export default {
     },
     async confirmEditHero() {
       if (this.valid) {
-        await this.updateHero(this.editHero);
-        this.closeEditHeroDialog();
-        await this.getUser();
+        try{
+          console.log(this.editHero);
+          let response = await this.updateHero({
+              _id: this.editHero._id,
+              publicName: this.editHero.publicName,
+              realName: this.editHero.realName,
+              powers: this.editHero.powers,
+          });
+          if (response.error === 0){
+            this.closeEditHeroDialog();
+            await this.getUser();
+          } else {
+            this.$store.dispatch('errors/pushError', response.data);
+          }
+        } catch(error) {
+          this.$store.dispatch('errors/pushError', error);
+        }
       }
     },
     addPower() {
