@@ -243,7 +243,6 @@ export default {
     closeAddMemberDialog() {
       this.showAddMemberDialog = false;
       this.selectedHero = null;
-      this.isHeroSelected = false;
       this.newMember = { publicName: '', realName: '', powers: [] };
     },
     async confirmAddMember() {
