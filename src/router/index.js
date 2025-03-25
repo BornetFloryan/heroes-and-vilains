@@ -7,7 +7,7 @@ import OrgDetail from '@/views/OrgDetail.vue';
 import TeamList from '@/views/TeamList.vue';
 import TeamDetail from '@/views/TeamDetail.vue';
 import HeroList from '@/views/HeroList.vue';
-import Login from "@/views/Login.vue";
+import SignIn from "@/views/SignIn.vue";
 import UserProfile from "@/views/UserProfile.vue";
 import RegisterUser from "@/views/RegisterUser.vue";
 
@@ -22,8 +22,8 @@ const router = new Router({
     },
     {
       path: '/login',
-      name: 'Login',
-      component: Login,
+      name: 'SignIn',
+      component: SignIn,
     },
     {
       path: '/register',
