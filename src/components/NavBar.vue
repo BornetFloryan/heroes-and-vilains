@@ -5,6 +5,7 @@
     <v-btn text @click="navigateTo('/organizations')">Organizations</v-btn>
     <v-btn text @click="navigateTo('/teams')">Teams</v-btn>
     <v-btn text @click="navigateTo('/heroes')">Heroes</v-btn>
+    <v-btn text v-if="isAuthenticated" @click="navigateTo('/user-profile')">Profile</v-btn>
     <v-btn text @click="handleSecret">{{ secretButtonText }}</v-btn>
     <v-btn text @click="handleAuth">{{ authButtonText }}</v-btn>
   </v-app-bar>

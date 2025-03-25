@@ -242,6 +242,8 @@ export default {
     },
     closeAddMemberDialog() {
       this.showAddMemberDialog = false;
+      this.selectedHero = null;
+      this.isHeroSelected = false;
       this.newMember = { publicName: '', realName: '', powers: [] };
     },
     async confirmAddMember() {
@@ -253,6 +255,8 @@ export default {
             this.closeAddMemberDialog();
             await this.fetchTeamMembers();
             await this.fetchTeamList();
+            this.selectedHero = null;
+            this.selectedHero = false;
           } else {
             this.$store.dispatch('errors/pushError', response.data);
           }
@@ -272,7 +276,7 @@ export default {
       if (this.valid) {
         if (this.heroList.some(hero => hero.publicName === this.newMember.publicName) ||
             this.teamMembers.some(member => member.publicName === this.newMember.publicName)) {
-          alert('Le(s) nom(s) est déjà utilisé !');
+          athis.$store.dispatch('errors/pushError', 'Le(s) nom(s) est déjà utilisé !');
           return;
         }
         try {
@@ -295,7 +299,7 @@ export default {
             }
           }
         } catch (err) {
-          alert('confirmCreateHero : ' + err);
+          this.$store.dispatch('errors/pushError', err);
         }
       }
     },

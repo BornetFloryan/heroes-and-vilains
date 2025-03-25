@@ -13,12 +13,13 @@
           required
       ></v-text-field>
       <v-btn type="submit" :disabled="!valid">Login</v-btn>
+      <v-btn @click="goToRegister" :disabled="isAuthenticated">Register</v-btn>
     </v-form>
   </v-container>
 </template>
 
 <script>
-import { mapActions } from 'vuex';
+import { mapActions, mapState } from 'vuex';
 
 export default {
   data() {
@@ -28,19 +29,25 @@ export default {
       valid: false,
     };
   },
+  computed: {
+    ...mapState('auth', ['isAuthenticated']),
+  },
   methods: {
     ...mapActions('auth', ['signin']),
     async handleSignin() {
       try {
         const response = await this.signin({ login: this.login, password: this.password });
         if (response.error === 0) {
-          this.$router.push('/organizations');
+          this.$router.push('/user-profile');
         } else {
           this.$store.dispatch('errors/pushError', response.data);
         }
       } catch (err) {
         this.$store.dispatch('errors/pushError', err);
       }
+    },
+    goToRegister() {
+      this.$router.push('/register');
     },
   },
 };

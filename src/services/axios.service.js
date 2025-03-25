@@ -1,5 +1,6 @@
 import axios from 'axios'
 import store from "@/store";
+import router from "@/router";
 
 /* Explications :
 
@@ -25,7 +26,8 @@ Ces trois cas sont traités par une unique fonction handleError().
 
 // creation d'un agent axios, avec une config. pour atteindre l'API
 const axiosAgent = axios.create({
-    baseURL: 'https://apidemo.iut-bm.univ-fcomte.fr/'
+    baseURL: 'https://apidemo.iut-bm.univ-fcomte.fr/',
+    withCredentials: true
 })
 
 axiosAgent.interceptors.request.use(
@@ -42,23 +44,36 @@ axiosAgent.interceptors.request.use(
 );
 
 axiosAgent.interceptors.response.use(
+    response => {
+        const setCookieHeader = response.headers['set-cookie'];
+        if (setCookieHeader) {
+            document.cookie = setCookieHeader;
+        }
+        return response;
+    },
+    error => {
+        store.dispatch('errors/pushError', error.message);
+        return Promise.reject(error);
+    }
+);
+axiosAgent.interceptors.request.use(async config => {
+    let xsrfToken = sessionStorage.getItem('xsrfToken');
+    if (xsrfToken) {
+        config.headers['X-XSRF-TOKEN'] = xsrfToken;
+    }
+
+    return config;
+}, error => {
+    return Promise.reject(error);
+});
+
+axiosAgent.interceptors.response.use(
     response => response,
     error => {
         store.dispatch('errors/pushError', error.message);
         return Promise.reject(error);
     }
 );
-
-axiosAgent.interceptors.request.use(async config => {
-    let xsrfToken = localStorage.getItem('xsrfToken');
-    if (xsrfToken) {
-        config.headers['x-xsrf-token'] = xsrfToken;
-    }
-    return config;
-}, error => {
-    return Promise.reject(error);
-});
-
 
 /* Pour la démonstration, décommenter l'instruction suivnante.
   Cela permet d'ajouter à toutes les requêtes une entête api-key.
@@ -84,6 +99,13 @@ function handleError(serviceName, err) {
         console.log("ERROR while calling SERVICE " + serviceName + ": " + JSON.stringify(err.response));
         // on retourne un objet qui a la même structure qu'une réponse normale sans erreur.
         // mais avec un champ data contenant le message d'erreur renvoyé par l'API
+        if ((err.response.data.error === ERR_AUTH_NO_TOKEN) ||
+            (err.response.data.error === ERR_AUTH_NOT_AUTHORIZED) ||
+            (err.response.data.error === ERR_AUTH_TOKEN_EXPIRED) ) {
+            store.commit('auth/logout')
+            store.commit('errors/pushError', 'problems with tokens (none | expired | differs) => logout')
+            router.push('/')
+        }
         return {
             data: {
                 error: 1,
@@ -131,7 +153,10 @@ renvoyées par l'API, même en cas d'erreur.
 async function getRequest(uri, name, config = {}) {
     let response = null
     try {
-        response = await axiosAgent.get(uri, config)
+        response = await axiosAgent.get(uri, {
+            ...config,
+            withCredentials: true,
+        });
     } catch (err) {
         // le catch se fait si le serveur répond avec une erreur type 4XX, 5XX, ou bien si le serveur est off
         // dans ce cas, on appelle la méthode pour traiter ces types d'erreurs et on met le résutlat dans response.
@@ -149,7 +174,10 @@ async function getRequest(uri, name, config = {}) {
 async function postRequest(uri, data, name, config = {}) {
     let response = null
     try {
-        response = await axiosAgent.post(uri, data, config)
+        response = await axiosAgent.post(uri, data, {
+            ...config,
+            withCredentials: true,
+        });
     } catch (err) {
         // le catch se fait si le serveur répond avec une erreur type 4XX, 5XX, ou bien si le serveur est off
         // dans ce cas, on appelle la méthode pour traiter ces types d'erreurs
@@ -162,7 +190,10 @@ async function postRequest(uri, data, name, config = {}) {
 async function putRequest(uri, data, name, config = {}) {
     let response = null
     try {
-        response = await axiosAgent.put(uri, data, config)
+        response = await axiosAgent.put(uri, data, {
+            ...config,
+            withCredentials: true,
+        });
     } catch (err) {
         // le catch se fait si le serveur répond avec une erreur type 4XX, 5XX, ou bien si le serveur est off
         // dans ce cas, on appelle la méthode pour traiter ces types d'erreurs
@@ -175,7 +206,10 @@ async function putRequest(uri, data, name, config = {}) {
 async function patchRequest(uri, data, name, config={}) {
     let response = null
     try {
-        response = await axiosAgent.patch(uri, data, config)
+        response = await axiosAgent.patch(uri, data, {
+            ...config,
+            withCredentials: true,
+        });
     } catch (err) {
         // le catch se fait si le serveur répond avec une erreur type 4XX, 5XX, ou bien si le serveur est off
         // dans ce cas, on appelle la méthode pour traiter ces types d'erreurs

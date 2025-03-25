@@ -8,6 +8,8 @@ import TeamList from '@/views/TeamList.vue';
 import TeamDetail from '@/views/TeamDetail.vue';
 import HeroList from '@/views/HeroList.vue';
 import Login from "@/views/Login.vue";
+import UserProfile from "@/views/UserProfile.vue";
+import RegisterUser from "@/views/RegisterUser.vue";
 
 Vue.use(Router);
 
@@ -22,6 +24,11 @@ const router = new Router({
       path: '/login',
       name: 'Login',
       component: Login,
+    },
+    {
+      path: '/register',
+      name: 'register',
+      component: RegisterUser
     },
     {
       path: '/secret',
@@ -60,6 +67,11 @@ const router = new Router({
     {
       path: '*',
       redirect: '/organizations',
+    },
+    {
+      path: "/user-profile",
+      name: "UserProfile",
+      component: UserProfile,
     }
   ]
 });

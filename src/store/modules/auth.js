@@ -13,7 +13,7 @@ const mutations = {
     logout(state) {
         state.user = null;
         state.isAuthenticated = false;
-        localStorage.removeItem("xsrfToken");
+        sessionStorage.removeItem("xsrfToken");
         localStorage.removeItem("refreshToken");
     },
 };
@@ -22,9 +22,9 @@ const actions = {
     async signin({ commit }, { login, password }) {
         try {
             let response = await authService.signinService(login, password);
-            if (response.err === 0) {
+            if (response.error === 0) {
                 commit("setUser", { login: response.data.name });
-                localStorage.setItem("xsrfToken", response.data.xsrfToken);
+                sessionStorage.setItem("xsrfToken", response.data.xsrfToken);
                 localStorage.setItem("refreshToken", response.data.refreshToken);
             }
             return response;
@@ -38,7 +38,7 @@ const actions = {
         try {
             if (!state.user) return;
             let response = await authService.getUserService(state.user.login);
-            if (response.err === 0) {
+            if (response.error === 0) {
                 commit("setUser", response.data);
             }
             return response;
@@ -58,12 +58,9 @@ const actions = {
         }
     },
 
-    async register({ dispatch }, { login, password, hero, captchaToken }) {
+    async register({ dispatch }, data) {
         try {
-            let response = await authService.registerService(login, password, hero, captchaToken);
-            if (response.err === 0) {
-                await dispatch("signin", { login, password });
-            }
+            let response = await authService.registerService(data);
             return response;
         } catch (error) {
             console.error("Erreur lors de l'enregistrement", error);

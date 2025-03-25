@@ -13,8 +13,7 @@ export async function updateHeroFromAPI(heroData) {
     return postRequest('herocorp/heroes/authupdate', heroData, 'UPDATEHERO');
 }
 
-export async function registerFromAPI(login, password, hero, captchaToken) {
-    let data = { login, password, hero, captchaToken };
+export async function registerFromAPI(data) {
     return postRequest('authapi/user/register', data, 'REGISTER');
 }
 
@@ -48,25 +47,12 @@ export async function updateHeroService(heroData) {
     return response;
 }
 
-export async function registerService(login, password, hero, captchaToken) {
+export async function registerService(data) {
     let response;
     try {
-        response = await registerFromAPI(login, password, hero, captchaToken);
+        response = await registerFromAPI(data);
     } catch (error) {
         response = { error: 1, status: 404, data: 'Erreur réseau, impossible d\'enregistrer l\'utilisateur' };
     }
     return response;
-}
-
-export async function refreshTokenService() {
-    try {
-        const refreshToken = localStorage.getItem('refreshToken');
-        const response = await postRequest('authapi/auth/refresh', { refreshToken }, 'REFRESH');
-        if (response.err === 0) {
-            localStorage.setItem('xsrfToken', response.data.xsrfToken);
-        }
-        return response;
-    } catch (error) {
-        return { error: 1, status: 404, data: 'Erreur réseau, impossible de rafraîchir le token' };
-    }
 }
