@@ -1,26 +1,26 @@
 import { getRequest, postRequest, patchRequest } from "@/services/axios.service";
 
 export async function getAllOrgsFromAPI() {
-    return getRequest('/orgs/get', 'GETALLORGS');
+    return getRequest('herocorp/orgs/get', 'GETALLORGS');
 }
 
 export async function createOrgFromAPI(name, secret) {
     let data = { name: name, secret: secret };
-    return postRequest('/orgs/create', data, 'CREATEORG');
+    return postRequest('herocorp/orgs/create', data, 'CREATEORG');
 }
 
 export async function addTeamToOrgFromAPI(idTeam) {
     let data = { idTeam: idTeam };
-    return patchRequest('/orgs/addteam', data, 'ADDTEAMTOORG');
+    return patchRequest('herocorp/orgs/addteam', data, 'ADDTEAMTOORG');
 }
 
 export async function removeTeamFromOrgFromAPI(idTeam) {
     let data = { idTeam: idTeam };
-    return patchRequest('/orgs/removeteam', data, 'REMOVETEAMFROMORG');
+    return patchRequest('herocorp/orgs/removeteam', data, 'REMOVETEAMFROMORG');
 }
 
 export async function getOrgByIdFromAPI(id,) {
-    return getRequest(`/orgs/getbyid/${id}`, 'GETORG');
+    return getRequest(`herocorp/orgs/getbyid/${id}`, 'GETORG');
 }
 
 

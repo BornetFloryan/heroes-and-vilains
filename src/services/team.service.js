@@ -1,22 +1,22 @@
 import { getRequest, postRequest, patchRequest } from "@/services/axios.service";
 
 export async function getAllTeamsFromAPI() {
-    return getRequest('/teams/get', 'GETALLTEAMS');
+    return getRequest('herocorp/teams/get', 'GETALLTEAMS');
 }
 
 export async function createTeamFromAPI(name) {
     let data = { name: name };
-    return postRequest('/teams/create', data, 'CREATETEAM');
+    return postRequest('herocorp/teams/create', data, 'CREATETEAM');
 }
 
 export async function addHeroesToTeamFromAPI(idTeam, idHeroes) {
     let data = { idHeroes: [idHeroes], idTeam: idTeam };
-    return patchRequest('/teams/addheroes', data, 'ADDHEROESTOTEAM');
+    return patchRequest('herocorp/teams/addheroes', data, 'ADDHEROESTOTEAM');
 }
 
 export async function removeHeroesFromTeamFromAPI(idTeam, idHeroes) {
     let data = { idHeroes: [idHeroes], idTeam: idTeam };
-    return patchRequest('/teams/removeheroes', data, 'REMOVEHEROESFROMTEAM');
+    return patchRequest('herocorp/teams/removeheroes', data, 'REMOVEHEROESFROMTEAM');
 }
 
 

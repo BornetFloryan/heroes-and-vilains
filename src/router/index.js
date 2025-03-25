@@ -1,12 +1,13 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 import store from '@/store';
-import Auth from '@/views/Auth.vue';
+import Secret from '@/views/Secret.vue';
 import OrgList from '@/views/OrgList.vue';
 import OrgDetail from '@/views/OrgDetail.vue';
 import TeamList from '@/views/TeamList.vue';
 import TeamDetail from '@/views/TeamDetail.vue';
 import HeroList from '@/views/HeroList.vue';
+import Login from "@/views/Login.vue";
 
 Vue.use(Router);
 
@@ -18,9 +19,14 @@ const router = new Router({
       redirect: '/organizations',
     },
     {
-      path: '/auth',
-      name: 'Auth',
-      component: Auth
+      path: '/login',
+      name: 'Login',
+      component: Login,
+    },
+    {
+      path: '/secret',
+      name: 'Secret',
+      component: Secret
     },
     {
       path: '/organizations',
@@ -62,7 +68,7 @@ router.beforeEach((to, from, next) => {
   const isAuthenticated = store.state.secret.secret;
 
   if (to.meta.requiresAuth && !isAuthenticated) {
-    next(to.name === 'Auth' ? undefined : { name: 'Auth' });
+    next(to.name === 'Secret' ? undefined : { name: 'Secret' });
   } else {
     next();
   }

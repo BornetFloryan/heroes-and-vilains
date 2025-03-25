@@ -25,7 +25,7 @@ Ces trois cas sont traités par une unique fonction handleError().
 
 // creation d'un agent axios, avec une config. pour atteindre l'API
 const axiosAgent = axios.create({
-    baseURL: 'https://apidemo.iut-bm.univ-fcomte.fr/herocorp'
+    baseURL: 'https://apidemo.iut-bm.univ-fcomte.fr/'
 })
 
 axiosAgent.interceptors.request.use(
@@ -48,6 +48,14 @@ axiosAgent.interceptors.response.use(
         return Promise.reject(error);
     }
 );
+
+axios.interceptors.request.use(config => {
+    const xsrfToken = localStorage.getItem('xsrfToken');
+    if (xsrfToken) {
+        config.headers['x-xsrf-token'] = xsrfToken;
+    }
+    return config;
+});
 
 /* Pour la démonstration, décommenter l'instruction suivnante.
   Cela permet d'ajouter à toutes les requêtes une entête api-key.

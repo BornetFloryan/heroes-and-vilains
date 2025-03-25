@@ -5,6 +5,7 @@
     <v-btn text @click="navigateTo('/organizations')">Organizations</v-btn>
     <v-btn text @click="navigateTo('/teams')">Teams</v-btn>
     <v-btn text @click="navigateTo('/heroes')">Heroes</v-btn>
+    <v-btn text @click="handleSecret">{{ secretButtonText }}</v-btn>
     <v-btn text @click="handleAuth">{{ authButtonText }}</v-btn>
   </v-app-bar>
 </template>
@@ -15,21 +16,38 @@ import { mapState, mapActions } from 'vuex';
 export default {
   computed: {
     ...mapState('secret', ['secret']),
+    ...mapState('auth', ['isAuthenticated']),
+    secretButtonText() {
+      return this.secret ? 'Retirer secret' : 'Secret';
+    },
     authButtonText() {
-      return this.secret ? 'Logout' : 'Login';
+      return this.isAuthenticated ? 'Logout' : 'Login';
     }
   },
   methods: {
     ...mapActions('secret', ['setSecret']),
-    handleAuth() {
+    ...mapActions('auth', ['signin', "logout"]),
+    handleSecret() {
       if (this.secret) {
         this.setSecret('');
         if (this.$route.path !== '/organizations') {
           this.$router.push('/organizations');
         }
       } else {
-        if (this.$route.path !== '/auth') {
-          this.$router.push('/auth');
+        if (this.$route.path !== '/secret') {
+          this.$router.push('/secret');
+        }
+      }
+    },
+    handleAuth() {
+      if (this.isAuthenticated) {
+        this.logout()
+        if (this.$route.path !== '/organizations') {
+          this.$router.push('/organizations');
+        }
+      } else {
+        if (this.$route.path !== '/login') {
+          this.$router.push('/login');
         }
       }
     },

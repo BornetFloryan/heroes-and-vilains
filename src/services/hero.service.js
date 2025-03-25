@@ -1,19 +1,19 @@
 import { getRequest, postRequest, putRequest } from "@/services/axios.service";
 
 export async function getAllHeroesFromAPI() {
-    return getRequest('/heroes/getaliases', 'GETALLHEROES');
+    return getRequest('herocorp/heroes/getaliases', 'GETALLHEROES');
 }
 
 export async function createHeroFromAPI(data) {
-    return postRequest('/heroes/create', data, 'CREATEHERO');
+    return postRequest('herocorp/heroes/create', data, 'CREATEHERO');
 }
 
 export async function updateHeroFromAPI(data) {
-    return putRequest('/heroes/update', data, 'UPDATEHERO');
+    return putRequest('herocorp/heroes/update', data, 'UPDATEHERO');
 }
 
 export async function getHeroByIdFromAPI(id) {
-    return getRequest(`/heroes/getbyid/${id}`, 'GETHERO');
+    return getRequest(`herocorp/heroes/getbyid/${id}`, 'GETHERO');
 }
 
 // Service functions
