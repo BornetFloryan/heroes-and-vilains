@@ -49,13 +49,16 @@ axiosAgent.interceptors.response.use(
     }
 );
 
-axios.interceptors.request.use(config => {
-    const xsrfToken = localStorage.getItem('xsrfToken');
+axiosAgent.interceptors.request.use(async config => {
+    let xsrfToken = localStorage.getItem('xsrfToken');
     if (xsrfToken) {
         config.headers['x-xsrf-token'] = xsrfToken;
     }
     return config;
+}, error => {
+    return Promise.reject(error);
 });
+
 
 /* Pour la démonstration, décommenter l'instruction suivnante.
   Cela permet d'ajouter à toutes les requêtes une entête api-key.

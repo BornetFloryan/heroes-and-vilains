@@ -1,6 +1,5 @@
 import { postRequest, getRequest } from "@/services/axios.service";
 
-
 export async function signinFromAPI(login, password) {
     let data = { login, password };
     return postRequest('authapi/auth/signin', data, 'SIGNIN');
@@ -18,7 +17,6 @@ export async function registerFromAPI(login, password, hero, captchaToken) {
     let data = { login, password, hero, captchaToken };
     return postRequest('authapi/user/register', data, 'REGISTER');
 }
-
 
 export async function signinService(login, password) {
     let response;
@@ -58,4 +56,17 @@ export async function registerService(login, password, hero, captchaToken) {
         response = { error: 1, status: 404, data: 'Erreur réseau, impossible d\'enregistrer l\'utilisateur' };
     }
     return response;
+}
+
+export async function refreshTokenService() {
+    try {
+        const refreshToken = localStorage.getItem('refreshToken');
+        const response = await postRequest('authapi/auth/refresh', { refreshToken }, 'REFRESH');
+        if (response.err === 0) {
+            localStorage.setItem('xsrfToken', response.data.xsrfToken);
+        }
+        return response;
+    } catch (error) {
+        return { error: 1, status: 404, data: 'Erreur réseau, impossible de rafraîchir le token' };
+    }
 }

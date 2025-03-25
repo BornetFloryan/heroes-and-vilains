@@ -14,6 +14,7 @@ const mutations = {
         state.user = null;
         state.isAuthenticated = false;
         localStorage.removeItem("xsrfToken");
+        localStorage.removeItem("refreshToken");
     },
 };
 
@@ -21,9 +22,10 @@ const actions = {
     async signin({ commit }, { login, password }) {
         try {
             let response = await authService.signinService(login, password);
-            if (response.error === 0) {
+            if (response.err === 0) {
                 commit("setUser", { login: response.data.name });
                 localStorage.setItem("xsrfToken", response.data.xsrfToken);
+                localStorage.setItem("refreshToken", response.data.refreshToken);
             }
             return response;
         } catch (error) {
@@ -36,7 +38,7 @@ const actions = {
         try {
             if (!state.user) return;
             let response = await authService.getUserService(state.user.login);
-            if (response.error === 0) {
+            if (response.err === 0) {
                 commit("setUser", response.data);
             }
             return response;
@@ -59,7 +61,7 @@ const actions = {
     async register({ dispatch }, { login, password, hero, captchaToken }) {
         try {
             let response = await authService.registerService(login, password, hero, captchaToken);
-            if (response.error === 0) {
+            if (response.err === 0) {
                 await dispatch("signin", { login, password });
             }
             return response;
