@@ -48,7 +48,7 @@ const actions = {
         }
     },
 
-    async updateHero(_, { _id, publicName, realName, powers }) {
+    async updateUserHero(_, { _id, publicName, realName, powers }) {
         try {
             let response = await authService.updateHeroService({ _id, publicName, realName, powers });
             return response;

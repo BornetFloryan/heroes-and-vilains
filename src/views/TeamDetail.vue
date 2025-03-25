@@ -42,16 +42,17 @@
             label="Sélectionnez un héros"
             required
         ></v-select>
-        <v-btn v-if="availableHeroes.length === 0" @click="openCreateHeroDialog">Créer un nouveau héros</v-btn>
+        <v-btn v-if="availableHeroes.length === 0" @click="openCreateHeroDialog">Créer un nouvel héro</v-btn>
       </v-form>
       <v-btn @click="openCreateHeroDialog">Créer un héros</v-btn>
     </custom-dialog>
 
     <custom-dialog
         :visible="showCreateHeroDialog"
-        title="Créer un nouveau héros"
+        title="Créer un nouvel héro"
         @cancel="closeCreateHeroDialog"
         @confirm="confirmCreateHero"
+        :confirmDisabled="!newMember.publicName || !newMember.realName"
     >
       <v-form v-model="valid">
         <v-text-field
@@ -208,7 +209,7 @@ export default {
     ...mapState('secret', ['secret']),
     availableHeroes() {
       if (!this.heroList) return [];
-      return this.heroList.filter(hero => !this.heroList.includes(hero._id));
+      return this.heroList.filter(hero => !this.currentTeam.members.includes(hero._id));
     },
     isHeroSelected() {
       return this.selectedHero !== null;

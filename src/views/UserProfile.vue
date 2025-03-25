@@ -104,7 +104,7 @@ export default {
     ...mapState('auth', ['user']),
   },
   methods: {
-    ...mapActions('auth', ['getUser', 'updateHero']),
+    ...mapActions('auth', ['getUser', 'updateUserHero']),
     openEditHeroDialog() {
       this.editHero = { ...this.user.hero };
       this.showEditHeroDialog = true;
@@ -116,8 +116,7 @@ export default {
     async confirmEditHero() {
       if (this.valid) {
         try{
-          console.log(this.editHero);
-          let response = await this.updateHero({
+          let response = await this.updateUserHero({
               _id: this.editHero._id,
               publicName: this.editHero.publicName,
               realName: this.editHero.realName,

@@ -1,4 +1,4 @@
-import { postRequest, getRequest } from "@/services/axios.service";
+import { postRequest, getRequest, putRequest } from "@/services/axios.service";
 
 export async function signinFromAPI(login, password) {
     let data = { login, password };
@@ -10,7 +10,7 @@ export async function getUserFromAPI(login) {
 }
 
 export async function updateHeroFromAPI(data) {
-    return postRequest('herocorp/heroes/authupdate', data, 'UPDATEHERO');
+    return putRequest('herocorp/heroes/authupdate', data, 'UPDATEHERO');
 }
 
 export async function registerFromAPI(data) {
@@ -41,7 +41,7 @@ export async function updateHeroService({ _id, publicName, realName, powers }) {
     let response;
     try {
         let data = {
-            _id: id,
+            _id: _id,
             publicName,
             realName,
             powers
