@@ -72,7 +72,7 @@ export default {
       if (this.secret) {
         this.$router.push({ name: 'OrgDetail', params: { id: item._id } });
       } else {
-        alert('Veuillez renseigner votre clé secrète.');
+        this.$store.dispatch('errors/pushError', 'Veuillez renseigner votre clé secrète.');
       }
     },
     closeDialog() {
@@ -83,7 +83,7 @@ export default {
       if (this.valid) {
         const orgExists = this.orgList.some(org => org.name === this.name);
         if (orgExists) {
-          alert('Une organisation avec ce nom existe déjà.');
+          this.$store.dispatch('errors/pushError', 'Une organisation avec ce nom existe déjà.');
           return;
         }
         try {

@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 import store from '@/store';
-import Secret from '@/views/Secret.vue';
+import SecretPhrase from '@/views/SecretPhrase.vue';
 import OrgList from '@/views/OrgList.vue';
 import OrgDetail from '@/views/OrgDetail.vue';
 import TeamList from '@/views/TeamList.vue';
@@ -32,8 +32,8 @@ const router = new Router({
     },
     {
       path: '/secret',
-      name: 'Secret',
-      component: Secret
+      name: 'SecretPhrase',
+      component: SecretPhrase
     },
     {
       path: '/organizations',
@@ -80,7 +80,7 @@ router.beforeEach((to, from, next) => {
   const isAuthenticated = store.state.secret.secret;
 
   if (to.meta.requiresAuth && !isAuthenticated) {
-    next(to.name === 'Secret' ? undefined : { name: 'Secret' });
+    next(to.name === 'SecretPhrase' ? undefined : { name: 'Secret' });
   } else {
     next();
   }
