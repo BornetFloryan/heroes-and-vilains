@@ -45,7 +45,6 @@ export default {
       teamName: '',
       headers: [
         { text: 'Nom', value: 'name' },
-        { text: 'Actions', value: 'actions', sortable: false }
       ]
     };
   },
