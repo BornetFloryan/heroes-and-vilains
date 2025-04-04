@@ -2,6 +2,10 @@ import axios from 'axios'
 import store from "@/store";
 import router from "@/router";
 
+const ERR_AUTH_NO_TOKEN = 1001;
+const ERR_AUTH_NOT_AUTHORIZED = 1002;
+const ERR_AUTH_TOKEN_EXPIRED = 1003;
+
 /* Explications :
 
 Un agent axios permet de faire des requête asynchrones à un serveur.

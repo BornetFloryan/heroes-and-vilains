@@ -19,7 +19,7 @@
         @cancel="closeDialog"
         @confirm="submit"
     >
-      <v-form v-model="valid">
+      <v-form v-model="valid" @submit.prevent="submit">
         <v-text-field
             v-model="teamName"
             label="Nom de l'équipe"
@@ -67,7 +67,7 @@ export default {
       if (this.valid) {
         const teamExists = this.teamList.some(team => team.name === this.teamName);
         if (teamExists) {
-          alert('Une équipe avec ce nom existe déjà.');
+          this.$store.dispatch('errors/pushError', 'Une équipe avec ce nom existe déjà.');
           return;
         }
         try{
