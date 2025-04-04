@@ -82,7 +82,6 @@ export default {
       targetHeroId: null,
       headers: [
         { text: 'Nom public', value: 'publicName' },
-        { text: 'Vrai nom', value: 'realName' },
       ],
     };
   },

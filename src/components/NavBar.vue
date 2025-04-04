@@ -2,10 +2,10 @@
   <v-app-bar app>
     <v-toolbar-title>Heroes & Villains</v-toolbar-title>
     <v-spacer></v-spacer>
-    <v-btn text @click="navigateTo('/organizations')">Organizations</v-btn>
-    <v-btn text @click="navigateTo('/teams')">Teams</v-btn>
-    <v-btn text @click="navigateTo('/heroes')">Heroes</v-btn>
-    <v-btn text v-if="isAuthenticated" @click="navigateTo('/user-profile')">Profile</v-btn>
+    <v-btn text @click="navigateTo('/organizations')">Organisations</v-btn>
+    <v-btn text @click="navigateTo('/teams')">Equipes</v-btn>
+    <v-btn text @click="navigateTo('/heroes')">Héros</v-btn>
+    <v-btn text v-if="isAuthenticated" @click="navigateTo('/user-profile')">Profil</v-btn>
     <v-btn text @click="handleSecret">{{ secretButtonText }}</v-btn>
     <v-btn text @click="handleAuth">{{ authButtonText }}</v-btn>
   </v-app-bar>

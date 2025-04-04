@@ -57,7 +57,7 @@ export default {
       passSecret: '',
       targetOrgId: null,
       headers: [
-        { text: 'Name', value: 'name' },
+        { text: 'Nom', value: 'name' },
       ],
     };
   },
